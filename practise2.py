@@ -1,4 +1,4 @@
-# -*- coding -*-
+# -*- coding: utf-8 -*-
 
 def func_x(*a, **b):
     """
