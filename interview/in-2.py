@@ -8,7 +8,7 @@ def solve():
     n1 = 10
     n2 = 100
     ret = list()
-    for n in range(10, 100):
+    for n in range(10, 101):
         if n % 3 == 0 or n % 5 == 0:
             ret.append(n)
     print(ret)
