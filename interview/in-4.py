@@ -7,9 +7,8 @@
 import pdb
 
 
-def get_value(li, horiz, vtcl):
-    print([horiz, vtcl])
-    return li[horiz][vtcl]
+def get_value(li, vtcl, horiz):
+    return li[vtcl][horiz]
 
 
 def solve(data, ret_num):

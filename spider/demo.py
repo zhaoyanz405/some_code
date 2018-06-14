@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 import re
+import pdb
+import logging
 import requests
 from bs4 import BeautifulSoup
 
@@ -31,10 +33,19 @@ def get_all_url(url=None):
 def write_into_file(name=None):
     chapter_dict = get_all_url("http://www.biqukan.com/1_1094/")
     for k,v in chapter_dict.items():
+        logging.info("now, the (key, value) is (%s, %s)." % (k, v))
         content = get_content(url=v)
         with open(name, 'w+') as f :
-            f.write(k)
-            f.write(content)
+            try:
+                f.write(k)
+                f.write(content)
+            except UnicodeEncodeError as e:
+                pdb.set_trace()
+                print(e)
+                logging.error("something wrong has happend.\n   \
+                               k: %s\n    \
+                               content: %s\n" % (k, content))
+                raise
         print(k)
     
 
