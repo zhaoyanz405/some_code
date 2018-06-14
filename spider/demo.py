@@ -34,21 +34,16 @@ def get_all_url(url=None):
 
 def write_into_file(name=None):
     chapter_dict = get_all_url("http://www.biqukan.com/1_1094/")
+    err_chapter = {}
 
-    for k, v in chapter_dict.items():
-        logging.info("now, the (key, value) is (%s, %s)." % (k, v))
-        chapter_dict[k] = get_content(url=v).replace(u'\xa0', ' ')
-
-    chaps = sorted(list(chapter_dict.keys()))
-
-    err_chapter = []
     with open(name, 'w+') as f:
-        for ch in chaps:
+        for k, v in chapter_dict.items():
             try:
-                f.write(chapter_dict[ch] + '\n')
+                content = get_content(url=v).replace(u'\xa0', ' ')
+                f.write(content + '\n')
             except:
-                err_chapter.append(ch)
-        print(ch)
+                err_chapter[k] = v
+            print('%s is done.' % k)
 
     print('[FINISHED] err_chapter is %s' % err_chapter)
 
