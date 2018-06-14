@@ -15,12 +15,13 @@ def get_content(url=None):
     content = texts[0].text.replace('\xa0'*8, '\n')
     return content
 
+
 def get_all_url(url=None):
     server = 'http://www.biqukan.com/'
     assert url != None, "url must not be None"
     req = requests.get(url)
     bf = BeautifulSoup(req.text)
-    div = bf.find_all('div', class_ ='listmain')
+    div = bf.find_all('div', class_='listmain')
     a_bf = BeautifulSoup(str(div[0]))
     hrefs = a_bf.find_all('a')
 
@@ -30,24 +31,27 @@ def get_all_url(url=None):
 
     return ret
 
+
 def write_into_file(name=None):
     chapter_dict = get_all_url("http://www.biqukan.com/1_1094/")
-    for k,v in chapter_dict.items():
+
+    for k, v in chapter_dict.items():
         logging.info("now, the (key, value) is (%s, %s)." % (k, v))
-        content = get_content(url=v)
-        with open(name, 'w+') as f :
+        chapter_dict[k] = get_content(url=v).replace(u'\xa0', ' ')
+
+    chaps = sorted(list(chapter_dict.keys()))
+
+    err_chapter = []
+    with open(name, 'w+') as f:
+        for ch in chaps:
             try:
-                f.write(k)
-                f.write(content)
-            except UnicodeEncodeError as e:
-                pdb.set_trace()
-                print(e)
-                logging.error("something wrong has happend.\n   \
-                               k: %s\n    \
-                               content: %s\n" % (k, content))
-                raise
-        print(k)
-    
+                f.write(chapter_dict[ch] + '\n')
+            except:
+                err_chapter.append(ch)
+        print(ch)
+
+    print('[FINISHED] err_chapter is %s' % err_chapter)
+
 
 if __name__ == "__main__":
     write_into_file('D://test.txt')
