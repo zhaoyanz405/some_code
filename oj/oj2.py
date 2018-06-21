@@ -22,5 +22,9 @@ class Solution:
             return None
         
         tmp1, tmp2 = l1, l2
+        ret = ListNode(tmp1.val+tmp2.val)
         while tmp1.next is not None and tmp2.next is not None:
-            
+            ret.next.val = tmp1.val + tmp2.val
+            tmp1 = tmp1.next
+            tmp2 = tmp2.next
+
