@@ -119,6 +119,11 @@ def MainHanlder(web.RequestHandler):
         # 念了）
         raise gen.Return(task_data)
 ```
+*Tips: 使用gen.coroutine使得异步编程看起来向同步编程一样，只需要3点：*
+- 1. 使用@gen.coroutine*
+- 2. 装饰的函数必须是个生成器，即需要含yield
+- 3. 返回值形式，raise gen.Return(result)
+
 
 ## 参考文档
 | 名称 | 链接 |
