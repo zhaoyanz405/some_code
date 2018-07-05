@@ -36,7 +36,8 @@ from pprint import pprint
 class NotExistError(BaseException):
     pass
 
-def parse_excel_and_rename_pic(target_file='/home/zhaoy/Downloads/glfhj_0704.xlsx', pic_directory='/home/zhaoy/Downloads/小图340X480/'):
+
+def parse_excel_and_rename_pic(target_file='/home/zhaoy/Downloads/glfhj_0704.xlsx', pic_directory=None):
     """
     数据中包含line号，但输出的并不是需求的dict
     """
@@ -49,7 +50,7 @@ def parse_excel_and_rename_pic(target_file='/home/zhaoy/Downloads/glfhj_0704.xls
     param = []
     for row in range(1, booksheet.nrows):
         old_name = '%s_%s.png' % (get(row, 14), get(row, 15))
-        new_name = '%s_%s_%s.png' %(get(row, 14), get(row, 15), get(row, 16))
+        new_name = '%s_%s_%s_%s.png' %(get(row, 14), get(row, 15), get(row, 16), get(row, 0))
         param.append({
             'UPC': get(row, 0),
             'name': get(row, 2),
@@ -58,6 +59,8 @@ def parse_excel_and_rename_pic(target_file='/home/zhaoy/Downloads/glfhj_0704.xls
             'Price': get(row, 5),
             'Size': get(row, 6),
             'Brand': get(row, 8),
+            'Height': get(row, 9)[0:-4],
+            'Width': get(row, 10)[0:-4],
             'Line': get(row, 14),
             'Row': get(row, 15),
             'Sub_num': get(row, 16),
@@ -65,20 +68,21 @@ def parse_excel_and_rename_pic(target_file='/home/zhaoy/Downloads/glfhj_0704.xls
             'imgname': new_name, 
             })
 
-        # todo 
-        old_name=pic_directory + old_name
-        if os.path.isfile(old_name):
-            new_name=pic_directory + new_name
-            os.rename(old_name, new_name)
-        else:
-            pprint('the file %s is not exists.' % old_name)
+        if pic_directory is not None:
+            # todo 
+            old_name=pic_directory + old_name
+            if os.path.isfile(old_name):
+                new_name=pic_directory + new_name
+                os.rename(old_name, new_name)
+            else:
+                pprint('the file %s is not exists.' % old_name)
+                
             
-        
         
     return param
 
 
-def export_value(target_file='/home/zhaoy/Downloads/glfhj_0704.xlsx', pic_directory='/home/zhaoy/Downloads/小图340X480/'):
+def export_value(target_file='/home/zhaoy/Downloads/glfhj_0704.xlsx', pic_directory=None):
     """
 
     """
@@ -99,14 +103,10 @@ def export_value(target_file='/home/zhaoy/Downloads/glfhj_0704.xlsx', pic_direct
 if __name__ == '__main__':
     try:
         xlsx_path = sys.argv[1]
-        pic_directory = sys.argv[2]
+        pic_directory = None #sys.argv[2]
 
         if not os.path.isfile(xlsx_path):
             pprint('the %s is not a file.' % xlsx_path)
-            raise NotExistError
-        
-        if not os.path.isdir(pic_directory):
-            pprint('the %s is not directory.' % pic_directory)
             raise NotExistError
         
         pprint(export_value(xlsx_path, pic_directory))
