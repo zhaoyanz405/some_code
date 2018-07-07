@@ -125,6 +125,31 @@ def MainHanlder(web.RequestHandler):
 - 2. 装饰的函数必须是个生成器，即需要含yield
 - 3. 返回值形式，raise gen.Return(result)
 
+## 使用async和await实现非阻塞
+*同样使用上面的例子*
+
+```python
+def MainHanlder(web.RequestHandler):
+    """假设这是主页面"""
+
+    # @gen.coroutine
+    async def work(self):
+        pass
+
+    # @gen.coroutine
+    async def get(self):
+        """ 
+        假设db.get_data()是一个需要阻塞，耗时很长的操作，
+        使用异步时，在操作前使用yield，该操作会被挂起，
+        然后程序继续进行其他操作，当耗时步骤结束后，程序返
+        回到yield处，继续完成剩下的步骤
+        """
+        data = await self.work()
+        return data
+
+```
+*Tips: 不使用gen.coroutine写协程，只需要在方法名前面声明async，等待异步方法执行完毕要加await*
+
 
 ## 参考文档
 | 名称 | 链接 |
